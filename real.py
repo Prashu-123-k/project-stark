@@ -3,11 +3,15 @@ import time
 import socket
 import sqlite3
 import threading
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 from ultralytics import YOLO
 from twilio.rest import Client
 import cloudinary
 import cloudinary.uploader
+
+load_dotenv()
 
 
 # ----------------- log function ------------------
@@ -15,18 +19,18 @@ def log(msg):
     print(f"[{time.strftime('%H:%M:%S')}] {msg}")
 
 # ----------------- TWILIO CONFIGURATION ------------------
-ACCOUNT_SID = "twilio_sid"
-AUTH_TOKEN = "twilio_auth_token"
+ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID", "")
+AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN", "")
 
-WHATSAPP_FROM = "whatsapp:twilio_number"
-WHATSAPP_TO1 = "whatsapp:countrycode + user_number1"
-WHATSAPP_TO1 = "whatsapp:countrycode + user_number2"
+WHATSAPP_FROM = os.getenv("TWILIO_WHATSAPP_FROM", "")
+WHATSAPP_TO1 = os.getenv("WHATSAPP_TO1", "")
+WHATSAPP_TO2 = os.getenv("WHATSAPP_TO2", "")
 
 # ----------------- CLOUDINARY CONFIGURATION--------------------
 cloudinary.config(
-    cloud_name="cname",
-    api_key="capi_key",
-    api_secret="cloud seret key"
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME", ""),
+    api_key=os.getenv("CLOUDINARY_API_KEY", ""),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET", "")
 )
 
 # ----------------- MODEL CONFIGURATION ------------------
@@ -116,6 +120,8 @@ def sync_offline_alerts():
                 image_url = upload["secure_url"]
 
                 for target in (WHATSAPP_TO1, WHATSAPP_TO2):
+                    if not target:
+                        continue
                     client.messages.create(
                         from_=WHATSAPP_FROM,
                         to=target,
@@ -156,6 +162,8 @@ def send_whatsapp_with_photo(threat, frame):
         client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
         for target in (WHATSAPP_TO1, WHATSAPP_TO2):
+            if not target:
+                continue
             client.messages.create(
                 from_=WHATSAPP_FROM,
                 to=target,

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STARK | Real-Time Weapon Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>STARK</h1>
+            <p>Real-Time Threat Detection System</p>
+            <span class="status-badge"><span class="dot pulse"></span> System Active</span>
+        </header>
+
+        <main>
+            <div class="video-container">
+                <!-- Flask Video Feed -->
+                <img src="{{ url_for('video_feed') }}" alt="STARK Camera Feed" id="camera-feed">
+                <div class="overlay">
+                    <span>LIVE</span>
+                </div>
+            </div>
+
+            <section class="info-section">
+                <div class="card">
+                    <h3>About STARK</h3>
+                    <p>An AI-driven security system designed to detect weapons like guns and knives in real-time. Instantly alerts stakeholders via SMS/WhatsApp.</p>
+                </div>
+                <div class="card">
+                    <h3>Features</h3>
+                    <ul class="feature-list">
+                        <li>⚡ Ultra-fast YOLO Detection</li>
+                        <li>📲 Instant Twilio Alerts</li>
+                        <li>☁️ Cloudinary Evidence Storage</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2026 STARK Project. All systems secure.</p>
+        </footer>
+    </div>
+</body>
+</html>
